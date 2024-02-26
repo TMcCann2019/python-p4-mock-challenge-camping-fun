@@ -52,9 +52,8 @@ def get_camper_by_id(id):
         elif request.method == "PATCH":
             try:
                 form_data = request.get_json()
-                camper = Camper.query.filter_by(id=id).first()
-                camper.name = form_data["name"]
-                camper.age = form_data["age"]
+                for attr in form_data:
+                    setattr(camper, attr, form_data[attr])
                 db.session.commit()
                 response = make_response(camper.to_dict(), 202)
             except ValueError:
